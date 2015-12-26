@@ -5,9 +5,14 @@ import gevent
 from flask import Flask
 from flask_sockets import Sockets
 
-#REDIS_URL = os.environ['REDISCLOUD_URL']
-#REDIS_CHAN = 'chat'
+REDIS_URL = os.environ['REDISCLOUD_URL']
+REDIS_CHAN = 'chat'
 
+app = Flask(__name__)
+app.debug = 'DEBUG' in os.environ
+
+sockets = Sockets(app)
+redis = redis.from_url(REDIS_URL)
 
 
 class ChatBackend(object):
@@ -15,46 +20,69 @@ class ChatBackend(object):
 
     def __init__(self):
         self.clients = []
+        self.pubsub = redis.pubsub()
+        self.pubsub.subscribe(REDIS_CHAN)
+
+    def __iter_data(self):
+
+        for message in self.pubsub.listen():
+
+            data = message.get('data')
+
+            if message['type'] == 'message':
+                yield data
 
 
     def register(self, client):
         self.clients.append(client)
 
-    def send(self, message):
 
-        toRemove = []
+    def send(self, client, message):
 
-        for client in self.clients:
-            try:
-                client.send(message)
-            except Exception:
-                toRemove.append(client)
-
-        for client in toRemove:
+        """ Send a message to a specific client """
+        try:
+            client.send(message)
+        except Exception:
             self.clients.remove(client)
 
 
+    def run(self):
+
+        """For every message in the queu, send the message to the clients """
+        for data in self.__iter_data():
+            for client in self.clients:
+                gevent.spawn(self.send, client, data)
+
+    def start(self):
+        """ Start the application and let it run in the background """
+        gevent.spawn(self.run)
+
 
 chats = ChatBackend()
+chats.start()
 
-app = Flask(__name__)
-app.debug = 'DEBUG' in os.environ
-
-sockets = Sockets(app)
 
 @sockets.route('/send')
-def outbox(ws):
-
-    message = ws.receive()
-    print message
-
-    if message:
-        chats.send(message)
-
-@sockets.route('/receive')
 def inbox(ws):
 
+    while ws.socket is not None:
+        gevent.sleep()
+
+        message = ws.receive()
+
+        if message:
+            redis.publish(REDIS_CHAN, message)
+
+
+
+@sockets.route('/receive')
+def outbox(ws):
+
     chats.register(ws)
+
+    while ws.socket is not None:
+        gevent.sleep()
+
 
 @app.route('/')
 def hello():
