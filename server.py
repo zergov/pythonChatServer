@@ -43,22 +43,18 @@ app.debug = 'DEBUG' in os.environ
 sockets = Sockets(app)
 
 @sockets.route('/send')
-def inbox(ws):
+def outbox(ws):
 
-    gevent.sleep()
     message = ws.receive()
+    print message
 
     if message:
         chats.send(message)
 
 @sockets.route('/receive')
-def outbox(ws):
+def inbox(ws):
 
     chats.register(ws)
-
-    while ws.socket is not None:
-        gevent.sleep()
-
 
 @app.route('/')
 def hello():
