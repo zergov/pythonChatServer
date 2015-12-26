@@ -1,18 +1,18 @@
 import os
 import redis
 import gevent
+import json
 
 from flask import Flask
 from flask_sockets import Sockets
 
-REDIS_URL = os.environ['REDISCLOUD_URL']
 REDIS_CHAN = 'chat'
 
 app = Flask(__name__)
 app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
-redis = redis.from_url(REDIS_URL)
+redis = redis.from_url('127.0.0.1:6379')
 
 
 class ChatBackend(object):
@@ -65,7 +65,7 @@ chats.start()
 @sockets.route('/send')
 def inbox(ws):
 
-    while ws.socket is not None:
+    while not ws.closed:
         gevent.sleep()
 
         message = ws.receive()
@@ -80,7 +80,7 @@ def outbox(ws):
 
     chats.register(ws)
 
-    while ws.socket is not None:
+    while not ws.closed:
         gevent.sleep()
 
 
