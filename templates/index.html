@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <!-- Jquery -->
+        <script type="text/javascript" src="../static/js/jquery.js"></script>
+        <!-- Link to bootstrap  -->
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="../static/css/client.css" media="screen" title="no title" charset="utf-8">
+        <meta charset="utf-8">
+        <title>Websocket chat</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="bg-username">
+                    <div id="username-selection" class="center-block">
+                        <div class="input-group input-group-lg">
+                          <span class="input-group-addon" id="sizing-addon1">Choose a username</span>
+                          <input id='username-input' type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+                        </div>
+                        <button id="joinChat-btn" type="button" disabled="disabled" class="btn btn-lg btn-primary center-block">Join Chat</button>
+                    </div>
+                </div>
+                <div id="chat-dashboard">
+                    <div class="row">
+                      <div id="chat-box" class="col-md-8">
+                         <h2>You are : <span id="username-span"></span></h2>
+                         <div id="messages-box">
+                         </div>
+                         <div id="user-input">
+                             <div class="col-md-12">
+                                 <textarea id="user-message-input" name="name" rows="8" cols="40"></textarea>
+                                 <button id="send-btn" type="button" class="btn btn-primary btn-lg">Send</button>
+                             </div>
+                         </div>
+                      </div>
+
+                      <div id="user-list" class="col-md-4">
+
+                          <div id="conversations-list" class="panel panel-default">
+                            <div class="panel-heading">
+                              <h3 class="panel-title">Conversations</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="list-group">
+                                  <a href="#" class="list-group-item">Dapibus ac facilisis in<span class="badge">14</span></a>
+                                </div>
+                            </div>
+                          </div>
+
+                          <div id="online-members" class="panel panel-default">
+                            <div class="panel-heading">
+                              <h3 class="panel-title">Online Users</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/client.js"></script>
+</html>

@@ -4,7 +4,13 @@ import gevent
 import json
 
 from flask import Flask
+from flask import render_template
+
+from geventwebsocket import websocket
+from geventwebsocket import handler
+
 from flask_sockets import Sockets
+
 
 REDIS_CHAN = 'chat'
 
@@ -13,7 +19,6 @@ app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
 redis = redis.from_url('127.0.0.1:6379')
-
 
 class ChatBackend(object):
     """ Handling the websockets clients """
@@ -73,8 +78,6 @@ def inbox(ws):
         if message:
             redis.publish(REDIS_CHAN, message)
 
-
-
 @sockets.route('/receive')
 def outbox(ws):
 
@@ -86,4 +89,4 @@ def outbox(ws):
 
 @app.route('/')
 def hello():
-    return 'Hello world !'
+    return render_template('index.html')

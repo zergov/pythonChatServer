@@ -1,0 +1,106 @@
+#bg-username
+{
+    background-color: red;
+
+    position: absolute;
+    top:40%;
+
+    width:100%;
+    height:140px;
+
+    background-color:rgba(227,138,174,0.5);
+
+    z-index: 2;
+}
+
+#username-selection
+{
+    padding:10px;
+
+    width: 600px;
+    height: 120px;
+}
+
+#joinChat-btn
+{
+    margin-top: 10px;
+    width:60%;
+}
+
+/*############################*/
+
+#chat-dashboard
+{
+    margin-top:10px;
+    width:100%;
+
+    pointer-events: none;
+}
+
+#user-info
+{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.blured-area
+{
+  -webkit-filter: blur(7px);
+  -moz-filter: blur(7px);
+  -ms-filter: blur(7px);
+  -o-filter: blur(7px);
+  filter: blur(7px);
+}
+
+#messages-box
+{
+    height:400px;
+    max-width: 100%;
+    overflow-y:auto;
+    overflow-x: hidden;
+    border: 1px solid gray;
+    padding:5px;
+}
+
+.user-message
+{
+  display:block;
+  padding:5px;
+
+  white-space: pre-wrap;      /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;
+
+}
+
+#online-members
+{
+    overflow: auto;
+    max-height:500px;
+}
+
+#conversations-list
+{
+    max-height:300px;
+    overflow:auto;
+}
+
+#user-input textarea
+{
+    margin-top:10px;
+    margin-left: 5px;
+    width:80%;
+    height:100px;
+
+    resize: none;
+}
+
+#send-btn
+{
+  width:15%;
+  margin-top:-90px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
