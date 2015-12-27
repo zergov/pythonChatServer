@@ -43,8 +43,8 @@ class ChatBackend(object):
 
 
     def send(self, client, message):
-
         """ Send a message to a specific client """
+
         try:
             client.send(message)
         except Exception:
@@ -52,14 +52,15 @@ class ChatBackend(object):
 
 
     def run(self):
-
         """For every message in the queu, send the message to the clients """
+
         for data in self.__iter_data():
             for client in self.clients:
                 gevent.spawn(self.send, client, data)
 
     def start(self):
         """ Start the application and let it run in the background """
+
         gevent.spawn(self.run)
 
 
