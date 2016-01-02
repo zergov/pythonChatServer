@@ -5,20 +5,17 @@ import json
 
 from flask import Flask
 from flask import render_template
-
+from flask_sockets import Sockets
 from geventwebsocket import websocket
 from geventwebsocket import handler
-
-from flask_sockets import Sockets
-
-
-REDIS_CHAN = 'chat'
 
 app = Flask(__name__)
 app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
+
 redis = redis.from_url('127.0.0.1:6379')
+REDIS_CHAN = 'chat'
 
 class ChatBackend(object):
     """ Handling the websockets clients """
