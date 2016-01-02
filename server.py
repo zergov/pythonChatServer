@@ -67,10 +67,9 @@ class ChatBackend(object):
 chats = ChatBackend()
 chats.start()
 
-
 @sockets.route('/send')
 def inbox(ws):
-
+    """ User sends their input to this route """
     while not ws.closed:
         gevent.sleep()
 
@@ -81,7 +80,7 @@ def inbox(ws):
 
 @sockets.route('/receive')
 def outbox(ws):
-
+    """ User receives from this route """
     chats.register(ws)
 
     while not ws.closed:
@@ -89,5 +88,7 @@ def outbox(ws):
 
 
 @app.route('/')
+    """ Route to the index.html """
+
 def hello():
     return render_template('index.html')
