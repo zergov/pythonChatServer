@@ -15,6 +15,8 @@ socketio = SocketIO(app)
 
 chat_namespace = '/chat'
 
+clients = {}
+
 """
 WebSocket event handler
 """
@@ -32,6 +34,20 @@ def on_message():
 def on_disconnect():
     #TODO: Remove the user and warn the other clients
     pass
+
+"""
+Custom WebSocket events
+"""
+@socketio.on('register', namespace=chat_namespace)
+def register_user(data):
+
+    content = json.loads(data)
+    username = content['username']
+    sid = rooms()[0]
+
+    clients[username] = sid
+
+    print '{0}:{1} added to the clients.'.format(username, sid)
 
 
 """

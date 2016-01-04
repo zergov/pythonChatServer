@@ -53,6 +53,9 @@ function allowUser()
     $('#username-span').html(username);
 
     chatArea.html('');
+
+    // register this user on the server
+    socket.emit('register', JSON.stringify({'username' : username}));
 }
 
 
@@ -72,4 +75,8 @@ socket.on('connect', function(){
 
 socket.on('message', function(data){
     console.log(data);
+});
+
+socket.on('disconnect', function(data){
+    console.log('disconnected from server !');
 });
