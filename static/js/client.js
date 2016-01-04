@@ -59,16 +59,6 @@ function allowUser()
     socket.emit('get_user_list');
 }
 
-
-// Event binding
-var sendButton = $('#send-btn').click(sendMessage);
-
-function sendMessage()
-{
-    // nothing for now
-}
-
-
 // Websocket Event handling
 socket.on('connect', function(){
     console.log('connect to server !');
@@ -87,19 +77,25 @@ var onlineUserList = $('#connected-users-list');
 // Custom Websocket Event handling
 socket.on('on_client_list_received', function(data){
 
-    users = JSON.parse(data);
-
     // wipe the old userlist
     onlineUserList.html('');
 
+    users = JSON.parse(data);
     for(i in users)
     {
-        var item = '<a href="#" class="list-group-item">'+ users[i] +'</a>';
-
-        onlineUserList.append(item);
+        // prevent to display ourselves in the list of users
+        if(users[i] !== username)
+        {
+            var item = '<a href="#" class="list-group-item">'+ users[i] +'</a>';
+            onlineUserList.append(item);
+        }
     }
-
-
-
-
 });
+
+// Event binding
+var sendButton = $('#send-btn').click(sendMessage);
+
+function sendMessage()
+{
+    // nothing for now
+}
