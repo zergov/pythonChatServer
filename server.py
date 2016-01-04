@@ -21,6 +21,7 @@ WebSocket event handler
 
 @socketio.on('connect', namespace=chat_namespace)
 def on_connection():
+    #TODO:Register the user
     pass
 
 @socketio.on('message', namespace=chat_namespace)
@@ -29,6 +30,7 @@ def on_message():
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():
+    #TODO: Remove the user and warn the other clients
     pass
 
 

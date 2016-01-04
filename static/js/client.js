@@ -1,9 +1,7 @@
 var username;
 var userColor;
 
-
-var inbox = new WebSocket('ws://' + location.hostname + ':5000/receive');
-var outbox = new WebSocket('ws://' + location.hostname + ':5000/send');
+var socket = io('http://'+ location.hostname +':5000/chat');
 
 // setup the inital display ( show username form )
 initDisplay();
@@ -63,26 +61,15 @@ var sendButton = $('#send-btn').click(sendMessage);
 
 function sendMessage()
 {
-    var message = $('#user-message-input').val();
-
-    outbox.send(JSON.stringify({ username: username, text: message }));
+    // nothing for now
 }
 
-inbox.onopen = function()
-{
-    console.log('Connected to inbox !');
-};
 
-outbox.onopen = function()
-{
-    console.log('Connected to outbox !');
-};
+// Websocket Event handling
+socket.on('connect', function(){
+    console.log('connect to server !');
+});
 
-inbox.onmessage = function(e)
-{
-    console.log(e);
-
-    var data = JSON.parse(e.data);
-    var messageObj = "<span class='user-message'>[" + data['username'] + "] : "+ data['text'] +"</span>";
-    chatArea.append(messageObj);
-}
+socket.on('message', function(data){
+    console.log(data);
+});
