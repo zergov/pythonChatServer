@@ -1,91 +1,45 @@
 import os
-import redis
-import gevent
 import json
 
 from flask import Flask
 from flask import render_template
-from flask_sockets import Sockets
-from geventwebsocket import websocket
-from geventwebsocket import handler
+
+from flask_socketio import SocketIO
+from flask_socketio import rooms
+from flask_socketio import emit
 
 app = Flask(__name__)
-app.debug = 'DEBUG' in os.environ
+app.debug = True    #Use the debuger
 
-sockets = Sockets(app)
+socketio = SocketIO(app)
 
-redis = redis.from_url('127.0.0.1:6379')
-REDIS_CHAN = 'chat'
+chat_namespace = '/chat'
 
-class ChatBackend(object):
-    """ Handling the websockets clients """
+"""
+WebSocket event handler
+"""
 
-    def __init__(self):
-        self.clients = []
-        self.pubsub = redis.pubsub()
-        self.pubsub.subscribe(REDIS_CHAN)
+@socketio.on('connect', namespace=chat_namespace)
+def on_connection():
+    pass
 
-    def __iter_data(self):
+@socketio.on('message', namespace=chat_namespace)
+def on_message():
+    pass
 
-        for message in self.pubsub.listen():
-
-            data = message.get('data')
-
-            if message['type'] == 'message':
-                yield data
+@socketio.on('disconnect', namespace=chat_namespace)
+def on_disconnect():
+    pass
 
 
-    def register(self, client):
-        self.clients.append(client)
+"""
+Standard Flask routes
+"""
 
-
-    def send(self, client, message):
-        """ Send a message to a specific client """
-
-        try:
-            client.send(message)
-        except Exception:
-            self.clients.remove(client)
-
-
-    def run(self):
-        """For every message in the queu, send the message to the clients """
-
-        for data in self.__iter_data():
-            for client in self.clients:
-                gevent.spawn(self.send, client, data)
-
-    def start(self):
-        """ Start the application and let it run in the background """
-
-        gevent.spawn(self.run)
-
-
-chats = ChatBackend()
-chats.start()
-
-@sockets.route('/send')
-def inbox(ws):
-    """ User sends their input to this route """
-    while not ws.closed:
-        gevent.sleep()
-
-        message = ws.receive()
-
-        if message:
-            redis.publish(REDIS_CHAN, message)
-
-@sockets.route('/receive')
-def outbox(ws):
-    """ User receives from this route """
-    chats.register(ws)
-
-    while not ws.closed:
-        gevent.sleep()
-
-
-@app.route('/')
-    """ Route to the index.html """
-
-def hello():
+@app.route('/') #Route the index page
+def index():
     return render_template('index.html')
+
+
+if __name__ == '__main__':
+    socketio.run(app)
