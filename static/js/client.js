@@ -82,7 +82,24 @@ socket.on('disconnect', function(data){
     console.log('disconnected from server !');
 });
 
+var onlineUserList = $('#connected-users-list');
+
 // Custom Websocket Event handling
 socket.on('on_client_list_received', function(data){
-    console.log(data);
+
+    users = JSON.parse(data);
+
+    // wipe the old userlist
+    onlineUserList.html('');
+
+    for(i in users)
+    {
+        var item = '<a href="#" class="list-group-item">'+ users[i] +'</a>';
+
+        onlineUserList.append(item);
+    }
+
+
+
+
 });

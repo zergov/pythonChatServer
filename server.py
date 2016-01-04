@@ -49,7 +49,8 @@ def register_user(data):
 @socketio.on('get_user_list', namespace=chat_namespace)
 def get_connected_user():
 
-    data = json.dumps(clients)
+    usernames = clients.keys()
+    data = json.dumps(usernames)
     emit('on_client_list_received', data)
 
 """
