@@ -56,6 +56,7 @@ function allowUser()
 
     // register this user on the server
     socket.emit('register', JSON.stringify({'username' : username}));
+    socket.emit('get_user_list');
 }
 
 
@@ -79,4 +80,9 @@ socket.on('message', function(data){
 
 socket.on('disconnect', function(data){
     console.log('disconnected from server !');
+});
+
+// Custom Websocket Event handling
+socket.on('on_client_list_received', function(data){
+    console.log(data);
 });

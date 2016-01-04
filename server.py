@@ -23,7 +23,6 @@ WebSocket event handler
 
 @socketio.on('connect', namespace=chat_namespace)
 def on_connection():
-    #TODO:Register the user
     pass
 
 @socketio.on('message', namespace=chat_namespace)
@@ -47,8 +46,11 @@ def register_user(data):
 
     clients[username] = sid
 
-    print '{0}:{1} added to the clients.'.format(username, sid)
+@socketio.on('get_user_list', namespace=chat_namespace)
+def get_connected_user():
 
+    data = json.dumps(clients)
+    emit('on_client_list_received', data)
 
 """
 Standard Flask routes
@@ -60,4 +62,4 @@ def index():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
