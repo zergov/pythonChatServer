@@ -41,6 +41,12 @@ function initDisplay()
     $('#bg-username').css('background-color', rgbaColor);
 }
 
+function checkEnter(e)
+{
+    if(e.keyCode == 13)
+        sendMessage();
+}
+
 // verify the username form
 function usernameOnChange()
 {
@@ -100,15 +106,18 @@ function sendMessage()
 {
     content = messageInput.val();
 
-    if(chatTarget == null)
-        message = {'from': username, 'text': content};
-    else
-        message = {'from': username, 'text': content, 'to': chatTarget};
+    if(/\S/.test(content)) // check if string is empty or contains more than just whitespace
+    {
+        if(chatTarget == null)
+            message = {'from': username, 'text': content};
+        else
+            message = {'from': username, 'text': content, 'to': chatTarget};
 
-    socket.emit('message', message);
+        socket.emit('message', message);
 
-    // clear the input area
-    messageInput.val('');
+        // clear the input area
+        messageInput.val('');
+    }
 }
 
 
