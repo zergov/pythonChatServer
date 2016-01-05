@@ -26,7 +26,16 @@ def on_message():
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():
-    print 'user disconnected !'
+
+    sid = rooms()[0]
+    username = None
+
+    for client in clients:
+        if clients[client] is sid:
+            username = client
+            break
+
+    print '{0} Disconnected !'.format(username)
 
 
 # Custom WebSocket events
