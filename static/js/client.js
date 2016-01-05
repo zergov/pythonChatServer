@@ -90,7 +90,7 @@ function targetUser(user)
 // sends a message to the server
 function sendMessage()
 {
-    message = 'test 123';
+    message = JSON.stringify({from: username, text: 'test123'});
 
     socket.emit('message', message);
 }

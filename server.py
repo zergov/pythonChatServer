@@ -22,7 +22,15 @@ def on_connection():
 
 @socketio.on('message', namespace=chat_namespace)
 def on_message(data):
-    print data
+
+    message = json.loads(data)
+
+    if message.has_key('from') and message.has_key('text'):
+        if clients.has_key(message['from']): # else received a message from fake client
+            sid = clients[message['from']]
+
+            if sid is rooms()[0]: # else a client is trying to fake his identity !'
+                emit('message', data, broadcast=True)
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():
