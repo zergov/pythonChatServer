@@ -14,8 +14,10 @@ var chatArea = $('#messages-box');
 var onlineUserList = $('#connected-users-list');
 var sendButton = $('#send-btn');
 
+// Event binding
 usernameInput.keyup(usernameOnChange);
 joinChatBtn.click(allowUser);
+sendButton.click(sendMessage);
 
 // setup the initial display
 function initDisplay()
@@ -85,6 +87,13 @@ function targetUser(user)
     chatTarget = user;
 }
 
+// sends a message to the server
+function sendMessage()
+{
+    message = 'test 123';
+
+    socket.emit('message', message);
+}
 
 // Websocket Event handling
 socket.on('connect', function(){

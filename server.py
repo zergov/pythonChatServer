@@ -21,8 +21,8 @@ def on_connection():
     print 'user connected !'
 
 @socketio.on('message', namespace=chat_namespace)
-def on_message():
-    pass
+def on_message(data):
+    print data
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():
