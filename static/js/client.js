@@ -1,7 +1,9 @@
-
+// chat variables
 var username;
 var userColor;
 var chatTarget = null;
+
+var history = {};
 
 var socket = io.connect('http://'+ location.hostname +':5000/chat');
 
@@ -125,6 +127,11 @@ function receiveMessage(message)
 {
     if(message['private'] === true)
     {
+        if(history[message['from']] == undefined)
+            history[message['from']] = [];
+
+        history[message['from']].push(message); // add the message to the history of messages with this user
+
         element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
         chatArea.append(element);
     }
