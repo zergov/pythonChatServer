@@ -23,14 +23,12 @@ def on_connection():
 @socketio.on('message', namespace=chat_namespace)
 def on_message(data):
 
-    message = json.loads(data)
-
-    if message.has_key('from') and message.has_key('text'):
-        if clients.has_key(message['from']): # else received a message from fake client
-            sid = clients[message['from']]
+    if data.has_key('from') and data.has_key('text'):
+        if clients.has_key(data['from']): # else received a message from fake client
+            sid = clients[data['from']]
 
             if sid is rooms()[0]: # else a client is trying to fake his identity !'
-                distribute_message(message)
+                distribute_message(data)
 
 def distribute_message(message):
     """
@@ -75,8 +73,7 @@ def register_user(data):
     """
     Register a user with username:sid.
     """
-    content = json.loads(data)
-    username = content['username']
+    username = data['username']
     sid = rooms()[0]
 
     # add the user to the clients dictionary

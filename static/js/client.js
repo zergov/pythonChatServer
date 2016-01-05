@@ -67,7 +67,7 @@ function allowUser()
     chatArea.html('');
 
     // register this user on the server
-    socket.emit('register', JSON.stringify({'username' : username}));
+    socket.emit('register', {'username' : username});
     socket.emit('get_user_list');
 }
 
@@ -101,9 +101,9 @@ function sendMessage()
     content = messageInput.val();
 
     if(chatTarget == null)
-        message = JSON.stringify({from: username, text: content});
+        message = {'from': username, 'text': content};
     else
-        message = JSON.stringify({from: username, text: content, to: chatTarget});
+        message = {'from': username, 'text': content, 'to': chatTarget};
 
     socket.emit('message', message);
 
@@ -148,13 +148,12 @@ socket.on('on_client_list_received', function(message){
     onlineUserList.html('');
 
     users = JSON.parse(message);
+
     for(i in users)
     {
         // prevent to display ourselves in the list of users
         if(users[i] !== username)
-        {
             addOnlineUser(users[i]);
-        }
     }
 });
 
