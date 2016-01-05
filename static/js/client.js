@@ -85,7 +85,7 @@ function addOnlineUser(user)
 // target a user from the list to send messages to
 function targetUser(user)
 {
-    chatTarget = user;
+    chatTarget = user.text;
 }
 
 // sends a message to the server
