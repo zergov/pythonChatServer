@@ -49,7 +49,11 @@ def register_user(data):
     username = content['username']
     sid = rooms()[0]
 
+    # add the user to the clients dictionary
     clients[username] = sid
+
+    emit('user_registered', username, broadcast=True)
+
 
 @socketio.on('get_user_list', namespace=chat_namespace)
 def get_connected_user():

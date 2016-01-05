@@ -6,12 +6,14 @@ var socket = io('http://'+ location.hostname +':5000/chat');
 // setup the inital display ( show username form )
 initDisplay();
 
-// verify user username
+// ui element
 var usernameInput = $('#username-input');
 var joinChatBtn = $('#joinChat-btn');
 var chatArea = $('#messages-box');
-usernameInput.keyup(usernameOnChange);
+var onlineUserList = $('#connected-users-list');
+var sendButton = $('#send-btn');
 
+usernameInput.keyup(usernameOnChange);
 joinChatBtn.click(allowUser);
 
 // setup the initial display
@@ -59,6 +61,24 @@ function allowUser()
     socket.emit('get_user_list');
 }
 
+// remove the element of the disconnected user from the online
+// users's list
+function removeOnlineUser(username)
+{
+    onlineUserList.children('a').each(function () {
+        if(this.text === username)
+            this.remove();
+    });
+}
+
+
+
+
+
+
+
+
+
 // Websocket Event handling
 socket.on('connect', function(){
     console.log('connect to server !');
@@ -71,8 +91,6 @@ socket.on('message', function(data){
 socket.on('disconnect', function(data){
     console.log('disconnected from server !');
 });
-
-var onlineUserList = $('#connected-users-list');
 
 // Custom Websocket Event handling
 socket.on('on_client_list_received', function(message){
@@ -92,18 +110,22 @@ socket.on('on_client_list_received', function(message){
     }
 });
 
+// Update the list of online users
+socket.on('user_registered', function(user){
+
+    console.log(user + ' joined chat !');
+
+    if(user !== username)
+    {
+        var item = '<a href="#" class="list-group-item">'+ user +'</a>';
+        onlineUserList.append(item);
+    }
+});
+
 // Handle a user disconnecting
 socket.on('user_disconnected', function(username){
 
     console.log(username + ' disconnected !');
-    //TODO: Remove from the online user list.
+    removeOnlineUser(username);
 
 });
-
-// Event binding
-var sendButton = $('#send-btn').click(sendMessage);
-
-function sendMessage()
-{
-    // nothing for now
-}
