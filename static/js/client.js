@@ -1,8 +1,17 @@
+
+
+$(document).ready(function(){
+
 var username;
 var userColor;
 var chatTarget = null;
 
-var socket = io('http://'+ location.hostname +':5000/chat');
+var socket = io.connect('http://'+ location.hostname +':5000/chat');
+
+window.onbeforeunload = function(e)
+{
+    socket.disconnect();
+};
 
 // setup the inital display ( show username form )
 initDisplay();
@@ -155,5 +164,7 @@ socket.on('user_disconnected', function(user){
 
     console.log(user + ' disconnected !');
     removeOnlineUser(user);
+
+});
 
 });
