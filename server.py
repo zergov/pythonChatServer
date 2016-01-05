@@ -30,7 +30,29 @@ def on_message(data):
             sid = clients[message['from']]
 
             if sid is rooms()[0]: # else a client is trying to fake his identity !'
-                emit('message', data, broadcast=True)
+                distribute_message(message)
+
+def distribute_message(message):
+    """
+    Handle the distribution of message to users
+    """
+
+    data = {}
+    data['from'] = message['from']
+    data['text'] = message['text']
+    data['private'] = False
+
+    if message.has_key('to'):
+        destination = message['to']
+
+        if clients.has_key(destination):
+            data['private'] = True
+            emit('message', data, room=clients[destination])
+
+    else:
+        emit('message', data, broadcast=True)
+
+
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():

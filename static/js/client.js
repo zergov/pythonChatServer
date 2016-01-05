@@ -1,7 +1,4 @@
 
-
-$(document).ready(function(){
-
 var username;
 var userColor;
 var chatTarget = null;
@@ -95,13 +92,18 @@ function addOnlineUser(user)
 function targetUser(user)
 {
     chatTarget = user.text;
+    console.log('Target is now : ' + chatTarget);
 }
 
 // sends a message to the server
 function sendMessage()
 {
     content = messageInput.val();
-    message = JSON.stringify({from: username, text: content});
+
+    if(chatTarget == null)
+        message = JSON.stringify({from: username, text: content});
+    else
+        message = JSON.stringify({from: username, text: content, to: chatTarget});
 
     socket.emit('message', message);
 
@@ -112,10 +114,16 @@ function sendMessage()
 
 function receiveMessage(message)
 {
-    data = JSON.parse(message);
-
-    element = "<span class='user-message'>[" + data['from'] + "] : "+ data['text'] +"</span>";
-    chatArea.append(element);
+    if(message['private'] === true)
+    {
+        element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
+        chatArea.append(element);
+    }
+    else
+    {
+        element = "<span class='user-message'>[" + message['from'] + "] : "+ message['text'] +"</span>";
+        chatArea.append(element);
+    }
 }
 
 
@@ -164,7 +172,5 @@ socket.on('user_disconnected', function(user){
 
     console.log(user + ' disconnected !');
     removeOnlineUser(user);
-
-});
 
 });
