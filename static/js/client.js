@@ -123,14 +123,11 @@ function sendMessage()
 }
 
 
-function receiveMessage(message)
+function addMessageToChatArea(message)
 {
     if(message['private'] === true)
     {
-        if(history[message['from']] == undefined)
-            history[message['from']] = [];
-
-        history[message['from']].push(message); // add the message to the history of messages with this user
+        addMessageToHistory(message['from'], message);
 
         element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
         chatArea.append(element);
@@ -142,6 +139,14 @@ function receiveMessage(message)
     }
 }
 
+function addMessageToHistory(conversation, message)
+{
+    if(history[conversation] == undefined)
+        history[conversation] = [];
+
+    history[conversation].push(message); // add the message to the history of messages with this user
+}
+
 
 // Websocket Event handling
 socket.on('connect', function(){
@@ -150,7 +155,7 @@ socket.on('connect', function(){
 
 socket.on('message', function(data){
     console.log(data);
-    receiveMessage(data);
+    addMessageToChatArea(data);
 });
 
 socket.on('disconnect', function(data){

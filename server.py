@@ -41,11 +41,17 @@ def distribute_message(message):
     data['private'] = False
 
     if message.has_key('to'):
+
         destination = message['to']
+        sender = message['from']
+
+        data['to'] = destination
+        data['private'] = True
 
         if clients.has_key(destination):
-            data['private'] = True
+
             emit('message', data, room=clients[destination])
+            emit('message', data, room=clients[sender])
 
     else:
         emit('message', data, broadcast=True)
