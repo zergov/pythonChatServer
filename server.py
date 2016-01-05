@@ -17,10 +17,7 @@ chat_namespace = '/chat'
 
 clients = {}
 
-"""
-WebSocket event handler
-"""
-
+# Default websocket event handling
 @socketio.on('connect', namespace=chat_namespace)
 def on_connection():
     pass
@@ -34,12 +31,13 @@ def on_disconnect():
     #TODO: Remove the user and warn the other clients
     pass
 
-"""
-Custom WebSocket events
-"""
+
+# Custom WebSocket events
 @socketio.on('register', namespace=chat_namespace)
 def register_user(data):
-
+    """
+    Register a user with it's username:sid.
+    """
     content = json.loads(data)
     username = content['username']
     sid = rooms()[0]
@@ -48,15 +46,15 @@ def register_user(data):
 
 @socketio.on('get_user_list', namespace=chat_namespace)
 def get_connected_user():
-
+    """
+    Return the list of all connected users.
+    """
     usernames = clients.keys()
     data = json.dumps(usernames)
     emit('on_client_list_received', data)
 
-"""
-Standard Flask routes
-"""
 
+# Standard Flask routes
 @app.route('/') #Route the index page
 def index():
     return render_template('index.html')
