@@ -1,5 +1,6 @@
 var username;
 var userColor;
+var chatTarget = null;
 
 var socket = io('http://'+ location.hostname +':5000/chat');
 
@@ -63,20 +64,26 @@ function allowUser()
 
 // remove the element of the disconnected user from the online
 // users's list
-function removeOnlineUser(username)
+function removeOnlineUser(user)
 {
     onlineUserList.children('a').each(function () {
-        if(this.text === username)
+        if(this.text === user)
             this.remove();
     });
 }
 
+// add an element in the online user's list
+function addOnlineUser(user)
+{
+    var item = '<a href="#" onclick="targetUser(this)" class="list-group-item">'+ user +'</a>';
+    onlineUserList.append(item);
+}
 
-
-
-
-
-
+// target a user from the list to send messages to
+function targetUser(user)
+{
+    chatTarget = user;
+}
 
 
 // Websocket Event handling
@@ -104,8 +111,7 @@ socket.on('on_client_list_received', function(message){
         // prevent to display ourselves in the list of users
         if(users[i] !== username)
         {
-            var item = '<a href="#" class="list-group-item">'+ users[i] +'</a>';
-            onlineUserList.append(item);
+            addOnlineUser(users[i]);
         }
     }
 });
@@ -116,16 +122,13 @@ socket.on('user_registered', function(user){
     console.log(user + ' joined chat !');
 
     if(user !== username)
-    {
-        var item = '<a href="#" class="list-group-item">'+ user +'</a>';
-        onlineUserList.append(item);
-    }
+        addOnlineUser(user);
 });
 
 // Handle a user disconnecting
-socket.on('user_disconnected', function(username){
+socket.on('user_disconnected', function(user){
 
-    console.log(username + ' disconnected !');
-    removeOnlineUser(username);
+    console.log(user + ' disconnected !');
+    removeOnlineUser(user);
 
 });
