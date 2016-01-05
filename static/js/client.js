@@ -173,4 +173,6 @@ socket.on('user_disconnected', function(user){
     console.log(user + ' disconnected !');
     removeOnlineUser(user);
 
+    if(user === chatTarget)
+        chatTarget = null;
 });
