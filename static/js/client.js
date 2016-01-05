@@ -75,12 +75,12 @@ socket.on('disconnect', function(data){
 var onlineUserList = $('#connected-users-list');
 
 // Custom Websocket Event handling
-socket.on('on_client_list_received', function(data){
+socket.on('on_client_list_received', function(message){
 
     // wipe the old userlist
     onlineUserList.html('');
 
-    users = JSON.parse(data);
+    users = JSON.parse(message);
     for(i in users)
     {
         // prevent to display ourselves in the list of users
@@ -90,6 +90,14 @@ socket.on('on_client_list_received', function(data){
             onlineUserList.append(item);
         }
     }
+});
+
+// Handle a user disconnecting
+socket.on('user_disconnected', function(username){
+
+    console.log(username + ' disconnected !');
+    //TODO: Remove from the online user list.
+
 });
 
 // Event binding

@@ -33,10 +33,11 @@ def on_disconnect():
     for client in clients:
         if clients[client] is sid:
             username = client
+            clients.pop(client, None)
             break
 
-    print '{0} Disconnected !'.format(username)
-
+    if username is not None:
+        emit('user_disconnected', username, broadcast=True)
 
 # Custom WebSocket events
 @socketio.on('register', namespace=chat_namespace)
