@@ -13,6 +13,7 @@ var joinChatBtn = $('#joinChat-btn');
 var chatArea = $('#messages-box');
 var onlineUserList = $('#connected-users-list');
 var sendButton = $('#send-btn');
+var messageInput = $('#user-message-input');
 
 // Event binding
 usernameInput.keyup(usernameOnChange);
@@ -90,10 +91,24 @@ function targetUser(user)
 // sends a message to the server
 function sendMessage()
 {
-    message = JSON.stringify({from: username, text: 'test123'});
+    content = messageInput.val();
+    message = JSON.stringify({from: username, text: content});
 
     socket.emit('message', message);
+
+    // clear the input area
+    messageInput.val('');
 }
+
+
+function receiveMessage(message)
+{
+    data = JSON.parse(message);
+
+    element = "<span class='user-message'>[" + data['from'] + "] : "+ data['text'] +"</span>";
+    chatArea.append(element);
+}
+
 
 // Websocket Event handling
 socket.on('connect', function(){
@@ -102,6 +117,7 @@ socket.on('connect', function(){
 
 socket.on('message', function(data){
     console.log(data);
+    receiveMessage(data);
 });
 
 socket.on('disconnect', function(data){
