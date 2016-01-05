@@ -9,18 +9,16 @@ from flask_socketio import rooms
 from flask_socketio import emit
 
 app = Flask(__name__)
-app.debug = True    #Use the debuger
-
 socketio = SocketIO(app)
 
 chat_namespace = '/chat'
 
 clients = {}
 
-# Default websocket event handling
+# Default Websocket event
 @socketio.on('connect', namespace=chat_namespace)
 def on_connection():
-    pass
+    print 'user connected !'
 
 @socketio.on('message', namespace=chat_namespace)
 def on_message():
@@ -28,15 +26,14 @@ def on_message():
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():
-    #TODO: Remove the user and warn the other clients
-    pass
+    print 'user disconnected !'
 
 
 # Custom WebSocket events
 @socketio.on('register', namespace=chat_namespace)
 def register_user(data):
     """
-    Register a user with it's username:sid.
+    Register a user with username:sid.
     """
     content = json.loads(data)
     username = content['username']
@@ -47,14 +44,13 @@ def register_user(data):
 @socketio.on('get_user_list', namespace=chat_namespace)
 def get_connected_user():
     """
-    Return the list of all connected users.
+    Return the list of connected users.
     """
     usernames = clients.keys()
     data = json.dumps(usernames)
     emit('on_client_list_received', data)
 
-
-# Standard Flask routes
+#Standard Flask routes
 @app.route('/') #Route the index page
 def index():
     return render_template('index.html')
