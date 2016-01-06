@@ -22,6 +22,7 @@ var chatArea = $('#messages-box');
 var onlineUserList = $('#connected-users-list');
 var sendButton = $('#send-btn');
 var messageInput = $('#user-message-input');
+var conversationList = $('#current-conversations');
 
 // Event binding
 usernameInput.keyup(usernameOnChange);
@@ -127,7 +128,7 @@ function addMessageToChatArea(message)
 {
     if(message['private'] === true)
     {
-        addMessageToHistory(message['from'], message);
+        addMessageToHistory(message);
 
         element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
         chatArea.append(element);
@@ -139,14 +140,24 @@ function addMessageToChatArea(message)
     }
 }
 
-function addMessageToHistory(conversation, message)
+function addMessageToHistory(message)
 {
+    conversation = message['to'] === username ? message['from'] : message['to'];
+
     if(history[conversation] == undefined)
+    {
         history[conversation] = [];
+        addConversation(conversation);
+    }
 
     history[conversation].push(message); // add the message to the history of messages with this user
 }
 
+function addConversation(name)
+{
+    var element = '<a href="#" class="list-group-item">'+ name +'</a>'
+    conversationList.append(element);
+}
 
 // Websocket Event handling
 socket.on('connect', function(){
