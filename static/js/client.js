@@ -103,7 +103,11 @@ function addOnlineUser(user)
 function targetUser(user)
 {
     chatTarget = user.text;
-    console.log('Target is now : ' + chatTarget);
+
+    if(history[user.text] != undefined)
+        openConversation(user);
+    else
+        chatArea.html('Chatting with: ' + user.text);
 }
 
 // sends a message to the server
@@ -130,12 +134,7 @@ function addMessageToChatArea(message)
 {
     if(message['private'] === true)
     {
-        element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
-        chatArea.append(element);
-    }
-    else
-    {
-        element = "<span class='user-message'>[" + message['from'] + "] : "+ message['text'] +"</span>";
+        element = "<span class='user-message'> [" + message['from'] + "] : "+ message['text'] +"</span>";
         chatArea.append(element);
     }
 }
