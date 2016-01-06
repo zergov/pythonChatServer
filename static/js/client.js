@@ -106,7 +106,10 @@ function targetUser(user) // user is HTML element
     chatTarget = userString;
 
     if(history[userString] != undefined)
-        openConversation(userString);
+    {
+        var conversationObj = findConversationInList(userString);
+        openConversation(conversationObj);
+    }
     else
         chatArea.html('Chatting with: ' + userString);
 }
@@ -190,6 +193,22 @@ function removeConversation(user)
             this.remove();
         });
     }
+}
+
+function findConversationInList(name) // find and return the conversation item in the conversations list
+{
+    var item = null;
+
+    conversationList.children('a').each(function () {
+
+        if($(this).attr('username') == conversation)
+        {
+            item = this;
+            return false;
+        }
+    });
+
+    return item;
 }
 
 function openConversation(conversation)// conversation is HTML element
