@@ -132,10 +132,16 @@ function sendMessage()
 
 function addMessageToChatArea(message)
 {
-    if(message['private'] === true)
+    conversation = message['from'] === username ? message['to'] : message['from'];
+
+    if(chatTarget == conversation)
     {
         element = "<span class='user-message'> [" + message['from'] + "] : "+ message['text'] +"</span>";
         chatArea.append(element);
+    }
+    else
+    {
+        console.log('Message received from : ' + conversation);
     }
 }
 
