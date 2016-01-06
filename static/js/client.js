@@ -100,14 +100,15 @@ function addOnlineUser(user)
 }
 
 // target a user from the list to send messages to
-function targetUser(user)
+function targetUser(user) // user is HTML element
 {
-    chatTarget = user.text;
+    var userString = user.text;
+    chatTarget = userString;
 
-    if(history[user.text] != undefined)
-        openConversation(user);
+    if(history[userString] != undefined)
+        openConversation(userString);
     else
-        chatArea.html('Chatting with: ' + user.text);
+        chatArea.html('Chatting with: ' + userString);
 }
 
 // sends a message to the server
@@ -166,6 +167,7 @@ function addMessageToHistory(message)
 
 function addConversation(name)
 {
+    //TODO: add a span specific to holding this conversation's name
     var element = '<a href="#" onclick="openConversation(this)" class="list-group-item">'+ name +'</a>'
     conversationList.append(element);
 }
@@ -183,14 +185,16 @@ function removeConversation(user)
     }
 }
 
-function openConversation(conversation)
+function openConversation(conversation)// conversation is HTML element
 {
+    var conversationString = conversation.text;
+
     chatArea.html(''); // wipe current displayed messages
-    chatArea.append('Chatting with : ' + conversation.text);
+    chatArea.append('Chatting with : ' + conversationString);
 
-    chatTarget = conversation.text;
+    chatTarget = conversationString;
 
-    messages = history[conversation.text]['messages'];
+    messages = history[conversationString]['messages'];
 
     for(var i = 0; i < messages.length; i++)
         addMessageToChatArea(messages[i]);
