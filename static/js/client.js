@@ -167,8 +167,8 @@ function addMessageToHistory(message)
 
 function addConversation(name)
 {
-    //TODO: add a span specific to holding this conversation's name
-    var element = '<a href="#" onclick="openConversation(this)" class="list-group-item">'+ name +'</a>'
+    //TODO: add an attribute specific to holding this conversation's name
+    var element = '<a href="#" onclick="openConversation(this)" username="'+ name +'" class="list-group-item">'+ name +'</a>'
     conversationList.append(element);
 }
 
@@ -187,7 +187,7 @@ function removeConversation(user)
 
 function openConversation(conversation)// conversation is HTML element
 {
-    var conversationString = conversation.text;
+    var conversationString = $(conversation).attr('username');
 
     chatArea.html(''); // wipe current displayed messages
     chatArea.append('Chatting with : ' + conversationString);
