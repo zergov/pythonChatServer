@@ -53,10 +53,6 @@ def distribute_message(message):
             emit('message', data, room=clients[destination])
             emit('message', data, room=clients[sender])
 
-    else:
-        emit('message', data, broadcast=True)
-
-
 
 @socketio.on('disconnect', namespace=chat_namespace)
 def on_disconnect():

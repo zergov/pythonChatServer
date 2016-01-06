@@ -130,8 +130,6 @@ function addMessageToChatArea(message)
 {
     if(message['private'] === true)
     {
-        addMessageToHistory(message);
-
         element = "<span class='user-message'> >" + message['from'] + "< : "+ message['text'] +"</span>";
         chatArea.append(element);
     }
@@ -163,8 +161,12 @@ function addConversation(name)
 
 function openConversation(conversation)
 {
+    chatArea.html(''); // wipe current displayed messages
+
     messages = history[conversation.text];
-    console.log(messages);
+
+    for(var i = 0; i < messages.length; i++)
+        addMessageToChatArea(messages[i]);
 }
 
 // Websocket Event handling
@@ -173,7 +175,7 @@ socket.on('connect', function(){
 });
 
 socket.on('message', function(data){
-    console.log(data);
+    addMessageToHistory(data);
     addMessageToChatArea(data);
 });
 
