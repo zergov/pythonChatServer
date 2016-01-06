@@ -142,14 +142,21 @@ function addMessageToChatArea(message)
     }
     else
     {
-        console.log('Message received from : ' + conversation);
+        addUnreadMessage(conversation);
     }
 }
 
 function addUnreadMessage(conversation)
 {
     history[conversation]['unread']++;
-    console.log(history[conversation]);
+
+    var span = '<span class="badge">'+ history[conversation]['unread'] +'</span>';
+
+    conversationList.children('a').each(function () {
+
+        if($(this).attr('username') == conversation)
+            $(this).html(conversation + span ); // "this" is the current element in the loop
+    });
 }
 
 function addMessageToHistory(message)
