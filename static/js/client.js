@@ -145,17 +145,23 @@ function addMessageToChatArea(message)
     }
 }
 
+function addUnreadMessage(conversation)
+{
+    history[conversation]['unread']++;
+    console.log(history[conversation]);
+}
+
 function addMessageToHistory(message)
 {
     conversation = message['to'] === username ? message['from'] : message['to'];
 
     if(history[conversation] == undefined)
     {
-        history[conversation] = [];
+        history[conversation] = {'messages' : [], 'unread' : 0};
         addConversation(conversation);
     }
 
-    history[conversation].push(message); // add the message to the history of messages with this user
+    history[conversation]['messages'].push(message); // add the message to the history of messages with this user
 }
 
 function addConversation(name)
@@ -184,7 +190,7 @@ function openConversation(conversation)
 
     chatTarget = conversation.text;
 
-    messages = history[conversation.text];
+    messages = history[conversation.text]['messages'];
 
     for(var i = 0; i < messages.length; i++)
         addMessageToChatArea(messages[i]);
