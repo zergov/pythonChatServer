@@ -159,6 +159,19 @@ function addConversation(name)
     conversationList.append(element);
 }
 
+function removeConversation(user)
+{
+    if(history[user] != undefined)
+    {
+        delete history[user];
+
+        conversationList.children('a').each(function (){
+        if(this.text === user )
+            this.remove();
+        });
+    }
+}
+
 function openConversation(conversation)
 {
     chatArea.html(''); // wipe current displayed messages
@@ -209,7 +222,9 @@ socket.on('user_registered', function(user){
 socket.on('user_disconnected', function(user){
 
     console.log(user + ' disconnected !');
+
     removeOnlineUser(user);
+    removeConversation(user);
 
     if(user === chatTarget)
         chatTarget = null;
