@@ -74,6 +74,8 @@ function allowUser()
     $('#username-span').html(username);
 
     chatArea.html('');
+    onlineUserList.html('');
+    conversationList.html('');
 
     // register this user on the server
     socket.emit('register', {'username' : username});
@@ -175,9 +177,6 @@ socket.on('disconnect', function(data){
 
 // Custom Websocket Event handling
 socket.on('on_client_list_received', function(message){
-
-    // wipe the old userlist
-    onlineUserList.html('');
 
     users = JSON.parse(message);
 
