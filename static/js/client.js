@@ -157,8 +157,14 @@ function addMessageToHistory(message)
 
 function addConversation(name)
 {
-    var element = '<a href="#" class="list-group-item">'+ name +'</a>'
+    var element = '<a href="#" onclick="openConversation(this)" class="list-group-item">'+ name +'</a>'
     conversationList.append(element);
+}
+
+function openConversation(conversation)
+{
+    messages = history[conversation.text];
+    console.log(messages);
 }
 
 // Websocket Event handling
