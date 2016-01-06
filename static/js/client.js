@@ -175,6 +175,9 @@ function removeConversation(user)
 function openConversation(conversation)
 {
     chatArea.html(''); // wipe current displayed messages
+    chatArea.append('Chatting with : ' + conversation.text);
+
+    chatTarget = conversation.text;
 
     messages = history[conversation.text];
 
