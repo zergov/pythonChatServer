@@ -2,6 +2,7 @@
 var username;
 var userColor;
 var chatTarget = null;
+var activeConversationObj = null;
 
 var history = {};
 
@@ -105,8 +106,11 @@ function targetUser(user) // user is HTML element
     var userString = user.text;
     chatTarget = userString;
 
-    if(history[userString] != undefined)
+    console.log('targeting : ' + userString);
+
+    if(userString in history)
     {
+        console.log('found ' + userString + ' in history');
         var conversationObj = findConversationInList(userString);
         openConversation(conversationObj);
     }
@@ -177,7 +181,6 @@ function addMessageToHistory(message)
 
 function addConversation(name)
 {
-    //TODO: add an attribute specific to holding this conversation's name
     var element = '<a href="#" onclick="openConversation(this)" username="'+ name +'" class="list-group-item">'+ name +'</a>'
     conversationList.append(element);
 }
@@ -201,7 +204,7 @@ function findConversationInList(name) // find and return the conversation item i
 
     conversationList.children('a').each(function () {
 
-        if($(this).attr('username') == conversation)
+        if($(this).attr('username') == name)
         {
             item = this;
             return false;
@@ -211,11 +214,20 @@ function findConversationInList(name) // find and return the conversation item i
     return item;
 }
 
-function openConversation(conversation)// conversation is HTML element
+function openConversation(conversationObj)// conversation is HTML element
 {
-    var conversationString = $(conversation).attr('username');
+    if(activeConversationObj != null && activeConversationObj != undefined)
+    {
+        // Remove the active class from this conversation item
+        $(activeConversationObj).removeClass('active');
+    }
 
-    $(conversation).html(conversationString); // wipe the unread messages badge
+    var conversationString = $(conversationObj).attr('username');
+
+    $(conversationObj).html(conversationString); // wipe the unread messages badge
+    $(conversationObj).addClass('active');
+    activeConversationObj = conversationObj;
+
     chatArea.html(''); // wipe current displayed messages
     chatArea.append('Chatting with : ' + conversationString);
 
