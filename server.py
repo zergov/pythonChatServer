@@ -1,4 +1,3 @@
-import os
 import json
 
 from flask import Flask
@@ -10,25 +9,27 @@ from flask_socketio import emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-
 chat_namespace = '/chat'
 
 clients = {}
+
 
 # Default Websocket event
 @socketio.on('connect', namespace=chat_namespace)
 def on_connection():
     print 'user connected !'
 
+
 @socketio.on('message', namespace=chat_namespace)
 def on_message(data):
 
-    if data.has_key('from') and data.has_key('text'):
-        if clients.has_key(data['from']): # else received a message from fake client
+    if 'from' in data and 'text' in data:
+        if data['from'] in clients:  # else received a message from fake client
             sid = clients[data['from']]
 
-            if sid is rooms()[0]: # else a client is trying to fake his identity !'
+            if sid is rooms()[0]:  # else client is faking his identity !'
                 distribute_message(data)
+
 
 def distribute_message(message):
     """
@@ -40,7 +41,7 @@ def distribute_message(message):
     data['text'] = message['text']
     data['private'] = False
 
-    if message.has_key('to'):
+    if 'to' in message:
 
         destination = message['to']
         sender = message['from']
@@ -48,7 +49,7 @@ def distribute_message(message):
         data['to'] = destination
         data['private'] = True
 
-        if clients.has_key(destination):
+        if destination in clients:
 
             emit('message', data, room=clients[destination])
             emit('message', data, room=clients[sender])
@@ -68,6 +69,7 @@ def on_disconnect():
 
     if username is not None:
         emit('user_disconnected', username, broadcast=True)
+
 
 # Custom WebSocket events
 @socketio.on('register', namespace=chat_namespace)
@@ -93,8 +95,9 @@ def get_connected_user():
     data = json.dumps(usernames)
     emit('on_client_list_received', data)
 
-#Standard Flask routes
-@app.route('/') #Route the index page
+
+# Standard Flask routes
+@app.route('/')  # Route the index page
 def index():
     return render_template('index.html')
 
