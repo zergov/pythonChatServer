@@ -196,6 +196,7 @@ function openConversation(conversation)// conversation is HTML element
 {
     var conversationString = $(conversation).attr('username');
 
+    $(conversation).html(conversationString); // wipe the unread messages badge
     chatArea.html(''); // wipe current displayed messages
     chatArea.append('Chatting with : ' + conversationString);
 
